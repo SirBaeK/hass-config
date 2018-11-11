@@ -6,7 +6,7 @@ do
 done
 for PID in $(ps aux | grep hass | awk '{print $2}' | head -n -1)
 do
-	kill -9 $PID
+	sudo kill -9 $PID
 done
 
 
