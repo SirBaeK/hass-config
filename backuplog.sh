@@ -1,4 +1,5 @@
 #!/bin/bash
+#Made by SirBaeK 11/2018
 logfile="home-assistant"
 number=0
 #in homeassistant folder check for log
