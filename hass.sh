@@ -1,4 +1,6 @@
 #!/bin/bash
+#Made by SirBaeK 11/2018
+
 HASSPATH="/opt/homeassistant"
 HASSUSER="homeassistant"
 sudo ./backuplog.sh
@@ -6,23 +8,26 @@ sudo ./backuplog.sh
 
 
 case "$1" in
-  -p|python)
+
+  -p|python) #download python 3.5.3 required from homeassistant
 	    echo "add repository,update apt and install python3(>3.5.3)"
             sudo add-apt-repository -y ppa:deadsnakes/ppa;
             sudo apt-get update;
             sudo apt-get install -y python3.6-venv python3.6-dev
 	    echo "python3.6-venv + python3.6-dev installed"
             ;;
-  -a|adduser)
+
+  -a|adduser) #add homeassistant user with HOME dir
             echo "add user homeassistant"
 	    sudo useradd $HASSUSER -m -U -p $HASSUSER
 	    echo "user homeassistant added"
             ;;
-  -u|upgrade)
+
+  -u|upgrade) #upgrade homeassistant - NOT TESTED
             echo "upgrading homeassistant"
 	    sudo -u $HASSUSER -H sh -c "cd $HASSPATH; source $HASSPATH/bin/activate; python3.6 -m pip install --upgrade homeassistant; echo 'hass upgraded'"
 	    ;;
-  -c|clear)
+  -c|clear) #clearing /opt/homeassistant and make new with correct rights, must be executed after add-user
 	    echo "clearing /opt/homeassistant and make new with rights"
 	    if [ -d $HASSPATH ]; then
  	      sudo rm -rf $HASSPATH;
@@ -30,7 +35,7 @@ case "$1" in
               sudo chown $HASSUSER:$HASSUSER $HASSPATH/
             fi
 	    ;;
-  -i|install)
+  -i|install) #download homeassistant + dependiencies required 
 	    echo "Instalace homeassistant + dependiencies :D"
 	    python3.6 -m pip install wheel
 	    python3.6 -m pip install homeassistant
@@ -38,7 +43,7 @@ case "$1" in
 	    pip3 install home-assistant-frontend sqlalchemy aiohttp_cors PyQRCode pyotp warrant mutagen xmltodict netdisco distro
 	    echo "pip modules updated"
 	    ;;
-  -s|start)
+  -s|start) #start home assistant from python virtual environment in /opt/homeassistant: my hardlinks, MUST BE EDITED
 	    echo "Spoustim java virtual enviroment + hass"
 	    sudo -u $HASSUSER -H sh -c "python3.6 -m venv $HASSPATH; echo 'venv set'; . $HASSPATH/bin/activate; echo 'venv activated'; $HASSPATH/bin/hass --open-ui --daemon -c /home/homeassistant/.homeassistant/ -v; echo 'hass started'"
 	    sleep 5
@@ -46,20 +51,23 @@ case "$1" in
 	    ;;
 esac
 
-#sudo -u $HASSUSER -H -s
-#cd $HASSPATH
-#python3.6 -m venv $HASSPATH
-#sleep 3
+
+
+echo "konec"
+
+#################################################################################################
+#					basicaly my steps					#
+#					later wanna rewrite 					#
+#################################################################################################
+#sudo -u $HASSUSER -H -s									#
+#cd $HASSPATH											#
+#python3.6 -m venv $HASSPATH									#
+#sleep 3											#
 #. $HASSPATH/bin/activate
 ##sleep 1
 #$HASSPATH/bin/hass --open-ui --daemon -c /home/homeassistant/.homeassistant/
 #sleep 5
 #su -u kafkicz -H -s
-
-echo "konec"
-
-
-
 #if [ -d $HASSPATH ]; then
 #  sudo rm -rf $HASSPATH/*
 ##else
